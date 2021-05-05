@@ -5,7 +5,8 @@
     "lib": ["dom","es6"],                          
     "outDir": "dist",                       
     "rootDir": "src",                         
-    "removeComments": true,                     
+    "removeComments": true,
+    "strict": true,                     
     "esModuleInterop": true,                       
     "skipLibCheck": true,                         
     "forceConsistentCasingInFileNames": true 
