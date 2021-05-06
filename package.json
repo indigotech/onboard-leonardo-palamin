@@ -28,7 +28,10 @@
     "graphql-depth-limit": "1.1.0",
     "graphql-import": "1.0.2",
     "graphql-import-node": "0.0.4",
-    "http": "0.0.1-security"
+    "http": "0.0.1-security",
+    "pg": "8.6.0",
+    "reflect-metadata": "0.1.13",
+    "typeorm": "0.2.32"
   },
   "devDependencies": {
     "@types/compression": "1.7.0",
