@@ -32,17 +32,14 @@ createConnection({
   username: "onboard",
   password: "onboard",
   database: "onboard",
-  entities: [
-      User
-  ],
+  entities: [User],
   synchronize: true,
-  logging: false
-}).then(connection => {
+  logging: false,
+})
+  .then((connection) => {
+    let user = new User();
+    user.name = "Leo";
 
-  let user = new User();
-  user.name = "Leo";
-
-  return connection.manager
-          .save(user)
-
-}).catch(error => console.log(error));
+    return connection.manager.save(user);
+  })
+  .catch((error) => console.log(error));
