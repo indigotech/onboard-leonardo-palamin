@@ -3,6 +3,7 @@ import { User } from "./api/user";
 import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
 import { passwordValidate } from "./utils/password-validator";
+import { emailBeingUsedValidate } from "./utils/email-being-used-validator";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -18,9 +19,11 @@ const resolverMap: IResolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const passwordIsCorrect = passwordValidate(args.password);
+      const passwordIsCorrect = passwordValidate(args.password)
+      const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email)
+      const validatedUser = passwordIsCorrect && emailIsNotBeingUsed
 
-      const newUser = passwordIsCorrect ? await getRepository(User).save(user) : null;
+      const newUser = validatedUser ? await getRepository(User).save(user) : null
       return newUser;
     },
   },
