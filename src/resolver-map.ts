@@ -24,14 +24,11 @@ const resolverMap: IResolvers = {
       const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email);
       const validatedUser = passwordIsCorrect && emailIsNotBeingUsed;
 
-      const encryptedPassword = crypto
-        .createHash("sha256")
-        .update(args.password)
-        .digest("hex")
-      
-      user.password = encryptedPassword
-      
-      const newUser = validatedUser ? await getRepository(User).save(user) : null
+      const encryptedPassword = crypto.createHash("sha256").update(args.password).digest("hex");
+
+      user.password = encryptedPassword;
+
+      const newUser = validatedUser ? await getRepository(User).save(user) : null;
       return newUser;
     },
   },
