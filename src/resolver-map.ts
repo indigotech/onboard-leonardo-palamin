@@ -4,6 +4,7 @@ import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
 import { passwordValidate } from "./utils/password-validator";
 import { emailBeingUsedValidate } from "./utils/email-being-used-validator";
+import crypto from "crypto";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -23,7 +24,14 @@ const resolverMap: IResolvers = {
       const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email);
       const validatedUser = passwordIsCorrect && emailIsNotBeingUsed;
 
-      const newUser = validatedUser ? await getRepository(User).save(user) : null;
+      const encryptedPassword = crypto
+        .createHash("sha256")
+        .update(args.password)
+        .digest("hex")
+      
+      user.password = encryptedPassword
+      
+      const newUser = validatedUser ? await getRepository(User).save(user) : null
       return newUser;
     },
   },
