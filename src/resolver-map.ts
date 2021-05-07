@@ -3,10 +3,7 @@ import { User } from "./api/user";
 import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
 import { passwordValidate } from "./utils/password-validator";
-<<<<<<< HEAD
 import { emailBeingUsedValidate } from "./utils/email-being-used-validator";
-=======
->>>>>>> feat: password validator
 
 const resolverMap: IResolvers = {
   Query: {
