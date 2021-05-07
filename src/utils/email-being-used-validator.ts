@@ -6,8 +6,8 @@ export const emailBeingUsedValidate = async (email: string) => {
 
   const emailAlreadyBeingUsed = await repository.findOne({ email });
   if (emailAlreadyBeingUsed) {
-    throw "Este endereço de email já está sendo usado. Por favor, utilize outro."
+    throw "Este endereço de email já está sendo usado. Por favor, utilize outro.";
   } else {
-    return true
+    return true;
   }
-}
+};
