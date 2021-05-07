@@ -19,11 +19,11 @@ const resolverMap: IResolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const passwordIsCorrect = passwordValidate(args.password)
-      const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email)
-      const validatedUser = passwordIsCorrect && emailIsNotBeingUsed
+      const passwordIsCorrect = passwordValidate(args.password);
+      const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email);
+      const validatedUser = passwordIsCorrect && emailIsNotBeingUsed;
 
-      const newUser = validatedUser ? await getRepository(User).save(user) : null
+      const newUser = validatedUser ? await getRepository(User).save(user) : null;
       return newUser;
     },
   },
