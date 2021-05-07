@@ -17,7 +17,7 @@ const resolverMap: IResolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const newUser = await getRepository(User).save(user)
+      const newUser = await getRepository(User).save(user);
       return newUser;
     },
   },
