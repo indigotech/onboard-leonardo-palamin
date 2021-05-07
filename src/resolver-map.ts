@@ -2,6 +2,7 @@ import { IResolvers } from "graphql-tools";
 import { User } from "./api/user";
 import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
+import { passwordValidate } from "./utils/password-validator";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -17,7 +18,9 @@ const resolverMap: IResolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const newUser = await getRepository(User).save(user);
+      const passwordIsCorrect = passwordValidate(args.password);
+
+      const newUser = passwordIsCorrect ? await getRepository(User).save(user) : null;
       return newUser;
     },
   },
