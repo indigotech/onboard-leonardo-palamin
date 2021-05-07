@@ -6,8 +6,9 @@ import compression from "compression";
 import cors from "cors";
 import schema from "./schema";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
-import { User } from "./api/user/user";
+import { Database } from "./config/database";
+
+Database.config()
 
 const app = express();
 const server = new ApolloServer({
@@ -24,22 +25,3 @@ const httpServer = createServer(app);
 httpServer.listen({ port: 4000 }, (): void =>
   console.log("Backend onboarding is now runnind on http://localhost:4000/graphql")
 );
-
-createConnection({
-  type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "onboard",
-  password: "onboard",
-  database: "onboard",
-  entities: [User],
-  synchronize: true,
-  logging: false,
-})
-  .then((connection) => {
-    let user = new User();
-    user.name = "Leo";
-
-    return connection.manager.save(user);
-  })
-  .catch((error) => console.log(error));
