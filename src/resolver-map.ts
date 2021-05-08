@@ -2,8 +2,8 @@ import { IResolvers } from "graphql-tools";
 import { User } from "./api/user";
 import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
-import { passwordValidate } from "./utils/password-validator";
-import { emailBeingUsedValidate } from "./utils/email-being-used-validator";
+import { validatePassword } from "./utils/password-validator";
+import { validateEmail } from "./utils/email-validator";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -19,11 +19,11 @@ const resolverMap: IResolvers = {
       user.password = args.password;
       user.birthDate = args.birthDate;
 
-      const passwordIsCorrect = passwordValidate(args.password);
-      const emailIsNotBeingUsed = await emailBeingUsedValidate(args.email);
-      const validatedUser = passwordIsCorrect && emailIsNotBeingUsed;
+      const passwordIsCorrect = validatePassword(args.password);
+      const emailIsNotBeingUsed = await validateEmail(args.email);
+      const areCredentialsCorrect = passwordIsCorrect !== null && emailIsNotBeingUsed !== null;
 
-      const newUser = validatedUser ? await getRepository(User).save(user) : null;
+      const newUser = areCredentialsCorrect ? await getRepository(User).save(user) : null;
       return newUser;
     },
   },
