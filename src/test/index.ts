@@ -1,8 +1,20 @@
-var assert = require('assert');
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
-      assert.equal([1, 2, 3].indexOf(4), -1);
-    });
+import { Database } from "../config/database";
+
+const request = require('supertest');
+
+describe('GET /hello', () => {
+  Database.config()
+  it('responds with json', (done) => {
+    const supertest = request('http://localhost:4000');
+    supertest
+      .post('/graphql')
+      .send({ query: '{ helloWorld }' })
+      .set('Accept', 'application/json')
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err: any) => {
+        if (err) console.log(err.message);
+      });
+    done();
   });
 });
