@@ -7,8 +7,8 @@
     "start": "node 'dist/server.js'",
     "build": "tsc . && ncp src/schema dist/schema",
     "start:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
-    "start:test": "TEST=OK nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
-    "test": "TEST=OK mocha 'src/test/index.ts' --require ts-node/register"
+    "start:test": "TEST_RUNNING=TRUE nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
+    "test": "mocha 'src/test/index.ts' --require ts-node/register"
   },
   "repository": {
     "type": "git",
