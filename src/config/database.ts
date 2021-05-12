@@ -2,10 +2,10 @@ import { createConnection } from "typeorm";
 import { User } from "../api";
 
 interface DatabaseProps {
-  username: string
-  password: string
-  databaseName: string
-  port: number
+  username: string;
+  password: string;
+  databaseName: string;
+  port: number;
 }
 
 export class Database {
