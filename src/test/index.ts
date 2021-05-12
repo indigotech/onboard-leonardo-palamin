@@ -1,19 +1,19 @@
 import { Database } from "../config/database";
+import { expect } from "chai";
 
 const request = require("supertest");
 
-describe("GET /hello", () => {
+describe('Receive Hello, Onboard!', () => {
   before(async () => {
     await Database.config();
   });
   it("responds with json", async () => {
     const supertest = request("http://localhost:4000");
-    await supertest
+    const res = await supertest
       .post("/graphql")
       .send({ query: "{ helloWorld }" })
       .set("Accept", "application/json")
-      .expect("Content-Type", /json/)
-      .expect(200)
+    expect(res.body.data.helloWorld).to.be.eq('Hello, onboard!');
   });
 });
 
