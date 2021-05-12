@@ -7,7 +7,8 @@
     "start": "node 'dist/server.js'",
     "build": "tsc . && ncp src/schema dist/schema",
     "start:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
-    "test": "mocha 'src/test/index.ts' --require ts-node/register"
+    "start:test": "TEST=OK nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
+    "test": "TEST=OK mocha 'src/test/index.ts' --require ts-node/register"
   },
   "repository": {
     "type": "git",
@@ -21,8 +22,10 @@
   "homepage": "https://github.com/indigotech/onboard-leonardo-palamin#readme",
   "dependencies": {
     "apollo-server-express": "2.24.0",
+    "chai": "4.3.4",
     "compression": "1.7.4",
     "cors": "2.8.5",
+    "dotenv": "9.0.2",
     "express": "4.17.1",
     "express-graphql": "0.12.0",
     "graphql": "15.5.0",

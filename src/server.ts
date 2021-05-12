@@ -7,8 +7,18 @@ import cors from "cors";
 import schema from "./schema";
 import "reflect-metadata";
 import { Database } from "./config/database";
+import dotenv from "dotenv";
 
-Database.config()
+dotenv.config({ path: process.env.TEST === "OK" ? "../.test.env" : "../.env" });
+
+const DatabaseProps = {
+  port: Number(process.env.DATABASE_PORT),
+  username: String(process.env.DATABASE_USERNAME),
+  password: String(process.env.DATABASE_PASSWORD),
+  databaseName: String(process.env.DATABASE_NAME),
+}
+
+Database.config(DatabaseProps)
 
 const app = express();
 const server = new ApolloServer({
