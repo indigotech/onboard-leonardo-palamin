@@ -19,7 +19,8 @@ const Server = async () => {
     databaseName: String(process.env.DATABASE_NAME),
   };
 
-  await Database.config(DatabaseProps).then((): void => console.log(process.env.DATABASE_CONNECTED_MESSAGE));
+  await Database.config(DatabaseProps);
+  console.log(process.env.DATABASE_CONNECTED_MESSAGE);
 
   const app = express();
   const server = new ApolloServer({
@@ -33,7 +34,7 @@ const Server = async () => {
 
   const httpServer = createServer(app);
 
-  httpServer.listen({ port: 4000 }, (): void => console.log(process.env.SERVER_CONNECTED_MESSAGE));
+  httpServer.listen({ port: process.env.PORT }, (): void => console.log(process.env.SERVER_CONNECTED_MESSAGE));
 };
 
 Server();
