@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import request from "supertest";
 import crypto from "crypto";
 import { getRepository } from "typeorm";
 import { User } from "../api";
@@ -59,107 +58,35 @@ describe("Running tests", () => {
       .digest("hex");
     expect(createdUser?.password).to.be.eq(encryptedPassword);
   });
-});
 
-dotenv.config({ path: process.env.TEST_RUNNING === "TRUE" ? "./.test.env" : "./.env" });
-
-const TestDatabaseVars = {
-  port: Number(process.env.DATABASE_PORT),
-  username: String(process.env.DATABASE_USERNAME),
-  password: String(process.env.DATABASE_PASSWORD),
-  databaseName: String(process.env.DATABASE_NAME),
-};
-
-// Mutation data
-const mutation = `
-  mutation($user: UserInput!) {
-    createUser(user: $user) {
-      id
-      name
-      email
-      birthDate
-    }
-  }
-  `;
-
-const createUserName = String("Leo");
-const createUserEmail = String("leonardo.palamim@taqtile.com.br");
-const createUserPassword = String("23er23er");
-const createUserBirthDate = String("31-03-1998");
-
-const variables = {
-  name: createUserName,
-  email: createUserEmail,
-  password: createUserPassword,
-  birthDate: createUserBirthDate,
-};
-
-describe("Create user", () => {
-  before(async () => {
-    await Database.config(TestDatabaseVars);
-  });
-  it("creates user", async () => {
-    const supertest = request("http://localhost:4000");
-    const res = await supertest
-      .post("/graphql")
-      .send({ query: mutation, variables: { user: variables } })
-      .set("Accept", "application/json");
-    expect(Number(res.body.data.createUser.id)).to.be.above(0);
-    expect(res.body.data.createUser.name).to.be.eq(createUserName);
-    expect(res.body.data.createUser.email).to.be.eq(createUserEmail);
-    expect(res.body.data.createUser.birthDate).to.be.eq(createUserBirthDate);
-
-    const encryptedPassword = crypto.createHash("sha256").update(createUserPassword).digest("hex");
-    const createdUser = await getRepository(User).findOne(Number(res.body.data.createUser.id));
-    expect(createdUser?.password).to.be.eq(encryptedPassword);
-  });
-});
-
-const wrongUser1Name = String("Leo Again");
-const wrongUser1Email = String("leonardo.palamim@taqtile.com.br");
-const wrongUser1Password = String("23er22323");
-const wrongUser1BirthDate = String("31-03-1998");
-
-const wrongUser2Name = String("Jonas");
-const wrongUser2Email = String("jonas@taqtile.com.br");
-const wrongUser2Password = String("23e");
-const wrongUser2BirthDate = String("31-02-1001");
-
-const wrongEmailVars = {
-  name: wrongUser1Name,
-  email: wrongUser1Email,
-  password: wrongUser1Password,
-  birthDate: wrongUser1BirthDate,
-};
-
-const wrongPasswordVars = {
-  name: wrongUser2Name,
-  email: wrongUser2Email,
-  password: wrongUser2Password,
-  birthDate: wrongUser2BirthDate,
-};
-
-describe("Test email error", () => {
-  it("returns email error", async () => {
-    const supertest = request("http://localhost:4000");
-    const res = await supertest
-      .post("/graphql")
-      .send({ query: mutation, variables: { user: wrongEmailVars } })
-      .set("Accept", "application/json");
+  //Testing repeated email error
+  it("Prevents repeated email creation", async () => {
+    const repeatedEmailVars = {
+      user: {
+        name: "Leo Again",
+        email: "leonardo.palamim@taqtile.com.br",
+        password: "23er22323",
+        birthDate: "31-03-1998",
+      },
+    };
+    const res = await postGraphQL(createUserMutation, repeatedEmailVars);
     expect(res.body.errors[0].message).to.be.eq(
       "Este endereço de email já está sendo usado. Por favor, utilize outro."
     );
     expect(res.body.errors[0].code).to.be.eq(409);
   });
-});
 
-describe("Test password error", () => {
-  it("returns password error", async () => {
-    const supertest = request("http://localhost:4000");
-    const res = await supertest
-      .post("/graphql")
-      .send({ query: mutation, variables: { user: wrongPasswordVars } })
-      .set("Accept", "application/json");
+  //Testing wrong password error
+  it("Prevents wrong password", async () => {
+    const wrongPasswordVars = {
+      user: {
+        name: "Jonas",
+        email: "jonas@taqtile.com.br",
+        password: "23e",
+        birthDate: "31-02-1001",
+      },
+    };
+    const res = await postGraphQL(createUserMutation, wrongPasswordVars);
     expect(res.body.errors[0].message).to.be.eq(
       "Ops! Sua senha deve ter no mínimo 7 caracteres, com pelo menos 1 letra e 1 número. Por favor, tente novamente."
     );
