@@ -44,8 +44,12 @@ describe("Running tests", () => {
     expect(res.body.data.createUser.email).to.be.eq(createUserMutationVariables.user.email);
     expect(res.body.data.createUser.birthDate).to.be.eq(createUserMutationVariables.user.birthDate);
 
-    const encryptedPassword = crypto.createHash("sha256").update(createUserMutationVariables.user.password).digest("hex");
     const createdUser = await getRepository(User).findOne(+res.body.data.createUser.id);
+    expect(createdUser?.name).to.be.eq(createUserMutationVariables.user.name);
+    expect(createdUser?.email).to.be.eq(createUserMutationVariables.user.email);
+    expect(createdUser?.birthDate).to.be.eq(createUserMutationVariables.user.birthDate);
+    
+    const encryptedPassword = crypto.createHash("sha256").update(createUserMutationVariables.user.password).digest("hex");
     expect(createdUser?.password).to.be.eq(encryptedPassword);
   });
 });
