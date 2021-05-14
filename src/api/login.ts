@@ -5,7 +5,7 @@ import { AuthError, NotFoundError } from "../utils/error-handling";
 import { validatePassword } from "../utils/password-validator";
 import jwt from "jsonwebtoken";
 
-export const validateLogin = async (email: string, password: string) => {
+export const validateLogin = async (email: string, password: string, rememberMe?: boolean) => {
   const repository = getRepository(User);
 
   const user = await repository.findOne({ email });
@@ -28,7 +28,8 @@ export const validateLogin = async (email: string, password: string) => {
     throw new AuthError("A senha digitada está errada. Por favor, tente novamente");
   }
 
-  const token = jwt.sign({ id: userId }, String(process.env.JWT_SECRET), { expiresIn: process.env.JWT_EXPIRATION })
+  const tokenDuration = rememberMe ? process.env.JWT_EXPIRATION_LONG : process.env.JWT_EXPIRATION_SHORT
+  const token = jwt.sign({ id: userId }, String(process.env.JWT_SECRET), { expiresIn: tokenDuration })
 
   return { user, token };
 };
