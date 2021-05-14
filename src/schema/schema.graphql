@@ -12,10 +12,21 @@ type User {
   birthDate: String!
 }
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Login {
+  user: User
+  token: String!
+}
+
 type Query {
   helloWorld: String!
 }
 
 type Mutation {
   createUser(user: UserInput): User
+  login(data: LoginInput): Login
 }
