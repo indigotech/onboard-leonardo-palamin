@@ -6,6 +6,9 @@ import { validateEmail } from "./utils/email-being-used-validator";
 import crypto from "crypto";
 import { UserInput, LoginInput } from "./schema/types";
 import { validateLogin } from "./api/login";
+import jwt from "jsonwebtoken";
+import { AuthError } from "./utils/error-handling";
+import { stringify } from "querystring";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -14,7 +17,25 @@ const resolverMap: IResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: UserInput }) => {
+    createUser: async (_parent: any, { user: args }: { user: UserInput }, token: string) => {
+      interface TokenProps {
+        email: string
+        iat: number
+        exp: number
+      }
+
+      const isTokenValid = jwt.verify(token, "supersecret");
+      if (!isTokenValid) {
+        throw new AuthError("Token inválido!")
+      }
+
+      const validatedToke = isTokenValid as TokenProps
+
+      const notExpired = validatedToke.exp > 0
+      if (!notExpired) {
+        throw new AuthError("Token expirado")
+      }
+
       const user = new User();
       user.name = args.name;
       user.email = args.email;
