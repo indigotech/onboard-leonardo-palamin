@@ -20,6 +20,12 @@ export class InternalError extends BaseError {
     super(message, 500, detail);
   }
 }
+export class NotFoundError extends BaseError {
+  constructor(message = "Not Found.", detail?: string) {
+    super(message, 404, detail);
+  }
+}
+
 export function formatError(error: GraphQLError) {
   const originalError = error.originalError;
   if ((originalError as BaseError)?.base) {

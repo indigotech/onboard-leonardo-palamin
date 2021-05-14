@@ -5,6 +5,7 @@ import { validatePassword } from "./utils/password-validator";
 import { validateEmail } from "./utils/email-being-used-validator";
 import crypto from "crypto";
 import { UserInput, LoginInput } from "./schema/types";
+import { loginCheck } from "./api/login";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -32,14 +33,9 @@ const resolverMap: IResolvers = {
       return newUser;
     },
     login: async (_parent: any, { data: args }: { data: LoginInput }) => {
-      const user = {
-        id: 10,
-        name: "Leo",
-        email: args.email,
-        birthDate: "31-03-1998"
-      };
-      const token = "the_token";
-      return { user, token }
+      const loginResponse = await loginCheck(args.email, args.password);
+
+      return loginResponse;
     },
   },
 };
