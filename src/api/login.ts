@@ -28,8 +28,12 @@ export const validateLogin = async (email: string, password: string, rememberMe?
     throw new AuthError("A senha digitada está errada. Por favor, tente novamente");
   }
 
+<<<<<<< HEAD
   const tokenDuration = rememberMe ? process.env.JWT_EXPIRATION_LONG : process.env.JWT_EXPIRATION_SHORT
   const token = jwt.sign({ id: userId }, String(process.env.JWT_SECRET), { expiresIn: tokenDuration })
+=======
+  const token = jwt.sign({ email: email }, 'supersecret', { expiresIn: 15*24*60*60 })
+>>>>>>> feat: jwt in login request
 
   return { user, token };
 };
