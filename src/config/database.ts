@@ -1,15 +1,22 @@
 import { createConnection } from "typeorm";
 import { User } from "../api";
 
+interface DatabaseProps {
+  username: string;
+  password: string;
+  databaseName: string;
+  port: number;
+}
+
 export class Database {
-  static async config(): Promise<void> {
+  static async config({ port, username, password, databaseName }: DatabaseProps): Promise<void> {
     await createConnection({
       type: "postgres",
       host: "localhost",
-      port: 5432,
-      username: "onboard",
-      password: "onboard",
-      database: "onboard",
+      port: +port,
+      username: username,
+      password: password,
+      database: databaseName,
       entities: [User],
       synchronize: true,
     });
