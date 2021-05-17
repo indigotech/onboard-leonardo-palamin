@@ -7,31 +7,30 @@ import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
 
 describe("Running tests", () => {
-  before(async () => {
+  beforeEach(async () => {
     await setupServer();
   });
 
-  it("Query 'hello' responds with Hello, Onboard!", async () => {
-    const helloQuery = gql`
-      {
-        helloWorld
-      }
-    `;
-    const res = await postGraphQL(helloQuery);
-    expect(res.body.data.helloWorld).to.be.eq("Hello, onboard!");
-  });
+  describe("Testing Hello Query", () => {
+    it("Query 'hello' responds with Hello, Onboard!", async () => {
+      const helloQuery = gql`{ helloWorld }`;
+      const res = await postGraphQL(helloQuery);
+      expect(res.body.data.helloWorld).to.be.eq("Hello, onboard!");
+    });
+  })
 
-  it("Creates user in database", async () => {
-    const createUserMutation = gql`
-      mutation ($user: UserInput!) {
-        createUser(user: $user) {
-          id
-          name
-          email
-          birthDate
-        }
+
+  const createUserMutation = gql`
+    mutation($user: UserInput!) {
+      createUser(user: $user) {
+        id
+        name
+        email
+        birthDate
       }
     `;
+  
+  it("Creates user in database", async () => {
     const createUserMutationVariables = {
       user: {
         name: "Leo",
@@ -59,7 +58,6 @@ describe("Running tests", () => {
     expect(createdUser?.password).to.be.eq(encryptedPassword);
   });
 
-  //Testing repeated email error
   it("Prevents repeated email creation", async () => {
     const repeatedEmailVars = {
       user: {
@@ -76,7 +74,6 @@ describe("Running tests", () => {
     expect(res.body.errors[0].code).to.be.eq(409);
   });
 
-  //Testing wrong password error
   it("Prevents wrong password", async () => {
     const wrongPasswordVars = {
       user: {
