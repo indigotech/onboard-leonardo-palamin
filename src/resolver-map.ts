@@ -5,7 +5,7 @@ import { validatePassword } from "./utils/password-validator";
 import { validateEmail } from "./utils/email-being-used-validator";
 import crypto from "crypto";
 import { UserInput, LoginInput } from "./schema/types";
-import { loginCheck } from "./api/login";
+import { validateLogin } from "./api/login";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -32,8 +32,8 @@ const resolverMap: IResolvers = {
       const newUser = areCredentialsCorrect ? await getRepository(User).save(user) : null;
       return newUser;
     },
-    login: async (_parent: any, { data: args }: { data: LoginInput }) => {
-      const loginResponse = await loginCheck(args.email, args.password);
+    login: (_parent: any, { data: args }: { data: LoginInput }) => {
+      const loginResponse = validateLogin(args.email, args.password);
 
       return loginResponse;
     },
