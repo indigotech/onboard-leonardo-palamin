@@ -3,23 +3,20 @@ import request from "supertest";
 import crypto from "crypto";
 import { getRepository } from "typeorm";
 import { User } from "../api";
-import { Server } from "../server";
+import { setupServer } from "../server";
 import { postGraphQL } from "./post-graphql";
 
 describe("Running tests", () => {
-  //Setting up Server and Database
   before(async () => {
-    await Server();
+    await setupServer();
   });
 
-  //Testing Hello Query
   it("Query 'hello' responds with Hello, Onboard!", async () => {
     const helloQuery = "{ helloWorld }"
     const res = await postGraphQL(helloQuery);
     expect(res.body.data.helloWorld).to.be.eq("Hello, onboard!");
   });
 
-  //Testing Create User Mutation
   it("Creates user in database", async () => {
     const createUserMutation = `
     mutation($user: UserInput!) {

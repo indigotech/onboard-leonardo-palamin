@@ -8,7 +8,7 @@ import schema from "./schema";
 import "reflect-metadata";
 import { Database } from "./config/database";
 
-export const Server = async () => {
+export const setupServer = async () => {
   await Database.config();
 
   const app = express();

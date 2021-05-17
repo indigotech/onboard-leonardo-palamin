@@ -1,3 +1,3 @@
-import { Server } from "./server"
+import { setupServer } from "./server"
 
-Server();
+setupServer();
