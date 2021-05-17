@@ -10,6 +10,8 @@ export const validateLogin = async (email: string, password: string) => {
 
   const user = await repository.findOne({ email });
 
+  const userId = user?.id
+
   if (!user) {
     throw new NotFoundError(
       "Credenciais inválidas. Por favor, tente novamente."
@@ -26,7 +28,7 @@ export const validateLogin = async (email: string, password: string) => {
     throw new AuthError("A senha digitada está errada. Por favor, tente novamente");
   }
 
-  const token = jwt.sign({ email: email }, 'supersecret', { expiresIn: 15*24*60*60 })
+  const token = jwt.sign({ id: userId }, String(process.env.JWT_SECRET), { expiresIn: process.env.JWT_EXPIRATION })
 
   return { user, token };
 };
