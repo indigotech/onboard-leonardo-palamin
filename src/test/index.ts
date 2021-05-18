@@ -25,16 +25,16 @@ describe("Mutation: createUser", () => {
 
   describe("Mutation: createUser", () => {
     const createUserMutation = gql`
-        mutation($user: UserInput!) {
-          createUser(user: $user) {
-            id
-            name
-            email
-            birthDate
-          }
+      mutation ($user: UserInput!) {
+        createUser(user: $user) {
+          id
+          name
+          email
+          birthDate
         }
-        `;
-  
+      }
+    `;
+
     it("Creates user in database", async () => {
       const createUserMutationVariables = {
         user: {
@@ -44,25 +44,25 @@ describe("Mutation: createUser", () => {
           birthDate: "31-03-1998",
         },
       };
-  
+
       const res = await postGraphQL(createUserMutation, createUserMutationVariables);
       expect(+res.body.data.createUser.id).to.be.above(0);
       expect(res.body.data.createUser.name).to.be.eq(createUserMutationVariables.user.name);
       expect(res.body.data.createUser.email).to.be.eq(createUserMutationVariables.user.email);
       expect(res.body.data.createUser.birthDate).to.be.eq(createUserMutationVariables.user.birthDate);
-  
+
       const createdUser = await getRepository(User).findOne(+res.body.data.createUser.id);
       expect(createdUser?.name).to.be.eq(createUserMutationVariables.user.name);
       expect(createdUser?.email).to.be.eq(createUserMutationVariables.user.email);
       expect(createdUser?.birthDate).to.be.eq(createUserMutationVariables.user.birthDate);
-  
+
       const encryptedPassword = crypto
         .createHash("sha256")
         .update(createUserMutationVariables.user.password)
         .digest("hex");
       expect(createdUser?.password).to.be.eq(encryptedPassword);
     });
-  
+
     it("Prevents repeated email creation", async () => {
       const repeatedEmailVars = {
         user: {
@@ -78,7 +78,7 @@ describe("Mutation: createUser", () => {
       );
       expect(res.body.errors[0].code).to.be.eq(409);
     });
-  
+
     it("Prevents wrong password", async () => {
       const wrongPasswordVars = {
         user: {
@@ -94,57 +94,5 @@ describe("Mutation: createUser", () => {
       );
       expect(res.body.errors[0].code).to.be.eq(409);
     });
-  })
-});
-
-const wrongUser1Name = String("Leo Again");
-const wrongUser1Email = String("leonardo.palamim@taqtile.com.br");
-const wrongUser1Password = String("23er22323");
-const wrongUser1BirthDate = String("31-03-1998");
-
-const wrongUser2Name = String("Jonas");
-const wrongUser2Email = String("jonas@taqtile.com.br");
-const wrongUser2Password = String("23e");
-const wrongUser2BirthDate = String("31-02-1001");
-
-const wrongEmailVars = {
-  name: wrongUser1Name,
-  email: wrongUser1Email,
-  password: wrongUser1Password,
-  birthDate: wrongUser1BirthDate,
-};
-
-const wrongPasswordVars = {
-  name: wrongUser2Name,
-  email: wrongUser2Email,
-  password: wrongUser2Password,
-  birthDate: wrongUser2BirthDate,
-};
-
-describe("Test email error", () => {
-  it("returns email error", async () => {
-    const supertest = request("http://localhost:4000");
-    const res = await supertest
-      .post("/graphql")
-      .send({ query: mutation, variables: { user: wrongEmailVars } })
-      .set("Accept", "application/json");
-    expect(res.body.errors[0].message).to.be.eq(
-      "Este endereço de email já está sendo usado. Por favor, utilize outro."
-    );
-    expect(res.body.errors[0].code).to.be.eq(409);
-  });
-});
-
-describe("Test password error", () => {
-  it("returns password error", async () => {
-    const supertest = request("http://localhost:4000");
-    const res = await supertest
-      .post("/graphql")
-      .send({ query: mutation, variables: { user: wrongPasswordVars } })
-      .set("Accept", "application/json");
-    expect(res.body.errors[0].message).to.be.eq(
-      "Ops! Sua senha deve ter no mínimo 7 caracteres, com pelo menos 1 letra e 1 número. Por favor, tente novamente."
-    );
-    expect(res.body.errors[0].code).to.be.eq(409);
   });
 });
