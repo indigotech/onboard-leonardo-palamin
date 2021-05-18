@@ -1,10 +1,11 @@
 import { IResolvers } from "graphql-tools";
 import { User } from "./api/user";
-import { UserResponse } from "./schema";
 import { getRepository } from "typeorm";
 import { validatePassword } from "./utils/password-validator";
 import { validateEmail } from "./utils/email-being-used-validator";
 import crypto from "crypto";
+import { UserInput, LoginInput } from "./schema/types";
+import { validateLogin } from "./api/login";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -13,7 +14,7 @@ const resolverMap: IResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: UserResponse }) => {
+    createUser: async (_parent: any, { user: args }: { user: UserInput }) => {
       const user = new User();
       user.name = args.name;
       user.email = args.email;
@@ -30,6 +31,11 @@ const resolverMap: IResolvers = {
 
       const newUser = areCredentialsCorrect ? await getRepository(User).save(user) : null;
       return newUser;
+    },
+    login: (_parent: any, { data: args }: { data: LoginInput }) => {
+      const loginResponse = validateLogin(args.email, args.password);
+
+      return loginResponse;
     },
   },
 };

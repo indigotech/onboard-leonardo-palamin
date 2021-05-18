@@ -10,16 +10,25 @@ abstract class BaseError extends Error {
     this.detail = detail;
   }
 }
+
 export class AuthError extends BaseError {
   constructor(message = "Credenciais inválidas", detail?: string) {
     super(message, 409, detail);
   }
 }
+
 export class InternalError extends BaseError {
   constructor(message = "Ocorreu um erro. Tente novamente", detail?: string) {
     super(message, 500, detail);
   }
 }
+
+export class NotFoundError extends BaseError {
+  constructor(message = "Not Found.", detail?: string) {
+    super(message, 404, detail);
+  }
+}
+
 export function formatError(error: GraphQLError) {
   const originalError = error.originalError;
   if ((originalError as BaseError)?.base) {
