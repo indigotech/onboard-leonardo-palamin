@@ -16,7 +16,10 @@ export const setupServer = async () => {
   const server = new ApolloServer({
     schema,
     validationRules: [depthLimit(7)],
-    formatError
+    formatError,
+    context: ({ req }) => ({
+      jwt: req.headers.authorization,
+    }),
   });
 
   app.use(cors());
