@@ -3,11 +3,14 @@ import { User } from "./user";
 import crypto from "crypto";
 import { AuthError, NotFoundError } from "../utils/error-handling";
 import { validatePassword } from "../utils/password-validator";
+import jwt from "jsonwebtoken";
 
 export const validateLogin = async (email: string, password: string) => {
   const repository = getRepository(User);
 
   const user = await repository.findOne({ email });
+
+  const userId = user?.id
 
   if (!user) {
     throw new NotFoundError(
@@ -25,7 +28,7 @@ export const validateLogin = async (email: string, password: string) => {
     throw new AuthError("A senha digitada está errada. Por favor, tente novamente");
   }
 
-  const token = "";
+  const token = jwt.sign({ id: userId }, String(process.env.JWT_SECRET), { expiresIn: process.env.JWT_EXPIRATION })
 
   return { user, token };
 };
