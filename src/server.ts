@@ -7,6 +7,7 @@ import cors from "cors";
 import schema from "./schema";
 import "reflect-metadata";
 import { Database } from "./config/database";
+import { formatError } from "./utils/error-handling";
 
 export const setupServer = async () => {
   await Database.config();
@@ -15,6 +16,7 @@ export const setupServer = async () => {
   const server = new ApolloServer({
     schema,
     validationRules: [depthLimit(7)],
+    formatError
   });
 
   app.use(cors());

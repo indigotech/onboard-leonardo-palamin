@@ -14,6 +14,6 @@ export interface UserResponse {
 
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
-  resolvers,
+  resolvers
 });
 export default schema;

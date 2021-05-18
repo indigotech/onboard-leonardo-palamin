@@ -1,4 +1,3 @@
-import { DocumentNode } from "graphql";
 import request from "supertest";
 
 export const postGraphQL = (query: string, variables?: Record<string, unknown>) => {
