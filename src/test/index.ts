@@ -52,7 +52,8 @@ describe("Mutation: createUser", () => {
     });
 
     it("Says token is invalid", async () => {
-      const jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjIxMzE0ODU5LCJleHAiOjE2MjE0MDEyNTl9.q47RT71vhrt51qvYtjSBVf-o2Qjh27x6n2QmoiwjR";
+      const jwt =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiaWF0IjoxNjIxMzE0ODU5LCJleHAiOjE2MjE0MDEyNTl9.q47RT71vhrt51qvYtjSBVf-o2Qjh27x6n2QmoiwjR";
       const createUserMutationVariables = {
         user: {
           name: "Leo",
