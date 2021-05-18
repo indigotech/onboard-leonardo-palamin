@@ -7,20 +7,9 @@ import cors from "cors";
 import schema from "./schema";
 import "reflect-metadata";
 import { Database } from "./config/database";
-import dotenv from "dotenv";
 
-const Server = async () => {
-  dotenv.config({ path: process.env.TEST_RUNNING === "TRUE" ? "./.test.env" : "./.env" });
-
-  const DatabaseProps = {
-    port: Number(process.env.DATABASE_PORT),
-    username: String(process.env.DATABASE_USERNAME),
-    password: String(process.env.DATABASE_PASSWORD),
-    databaseName: String(process.env.DATABASE_NAME),
-  };
-
-  await Database.config(DatabaseProps);
-  console.log(process.env.DATABASE_CONNECTED_MESSAGE);
+export const setupServer = async () => {
+  await Database.config();
 
   const app = express();
   const server = new ApolloServer({
@@ -36,5 +25,3 @@ const Server = async () => {
 
   httpServer.listen({ port: process.env.PORT }, (): void => console.log(process.env.SERVER_CONNECTED_MESSAGE));
 };
-
-Server();

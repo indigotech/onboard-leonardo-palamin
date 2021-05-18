@@ -6,9 +6,8 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc . && ncp src/schema dist/schema",
-    "start:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
-    "start:test": "TEST_RUNNING=TRUE nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
-    "test": "mocha 'src/test/index.ts' --require ts-node/register"
+    "start:dev": "nodemon 'src/starter.ts' --exec 'ts-node' src/starter.ts -e ts,graphql",
+    "test": "TEST_RUNNING=TRUE mocha 'src/test/index.ts' --require ts-node/register"
   },
   "repository": {
     "type": "git",
@@ -32,6 +31,7 @@
     "graphql-depth-limit": "1.1.0",
     "graphql-import": "1.0.2",
     "graphql-import-node": "0.0.4",
+    "graphql-request": "3.4.0",
     "http": "0.0.1-security",
     "pg": "8.6.0",
     "reflect-metadata": "0.1.13",
@@ -45,6 +45,7 @@
     "@types/graphql-depth-limit": "1.1.2",
     "@types/mocha": "8.2.2",
     "@types/node": "15.0.2",
+    "@types/supertest": "2.0.11",
     "mocha": "8.4.0",
     "ncp": "2.0.0",
     "nodemon": "2.0.7",
