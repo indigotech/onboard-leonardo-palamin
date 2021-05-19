@@ -1,8 +1,8 @@
 import { getRepository } from "typeorm";
-import { User } from "./user";
+import { User } from "../../data/db/entity/user";
 import crypto from "crypto";
-import { AuthError } from "../utils/error-handling";
-import { validatePassword } from "../utils/password-validator";
+import { AuthError } from "../../utils/error-handling";
+import { validatePassword } from "../../utils/password-validator";
 import jwt from "jsonwebtoken";
 
 export const validateLogin = async (email: string, password: string, rememberMe?: boolean) => {

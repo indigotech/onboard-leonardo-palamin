@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import crypto from "crypto";
 import { getRepository } from "typeorm";
-import { User } from "../api";
-import { setupServer } from "../server";
+import { User } from "../data/db/entity/user";
+import { setupServer } from "../api/graphql/config/apollo-server";
 import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
 import jwt from "jsonwebtoken";

@@ -1,12 +1,12 @@
 import { IResolvers } from "graphql-tools";
-import { User } from "./api/user";
+import { User } from "../../data/db/entity/user";
 import { getRepository } from "typeorm";
-import { validatePassword } from "./utils/password-validator";
-import { validateEmail } from "./utils/email-being-used-validator";
+import { validatePassword } from "../../utils/password-validator";
+import { validateEmail } from "../../utils/email-being-used-validator";
 import crypto from "crypto";
 import { UserInput, LoginInput } from "./schema/types";
-import { validateLogin } from "./api/login";
-import { validateToken } from "./utils/validate-token";
+import { validateLogin } from "./login";
+import { validateToken } from "../../utils/validate-token";
 
 const resolverMap: IResolvers = {
   Query: {

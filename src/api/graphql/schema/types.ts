@@ -13,12 +13,12 @@ export interface User {
 }
 
 export interface LoginInput {
-  email: string
-  password: string
-  rememberMe: boolean
+  email: string;
+  password: string;
+  rememberMe: boolean;
 }
 
 export interface LoginResponse {
-  user: User
-  token: string
+  user: User;
+  token: string;
 }
