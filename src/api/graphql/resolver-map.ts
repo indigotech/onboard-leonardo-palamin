@@ -18,7 +18,7 @@ const resolverMap: IResolvers = {
     user: async (_parent: any, { user: args }: { user: UserInput }, context: any) => {
       validateToken(context.jwt);
 
-      const user = getRepository(User).findOne(args.id);
+      const user = await getRepository(User).findOne(args.id);
       if (!user) {
         throw new NotFoundError("Usuário não encontrado.");
       }
