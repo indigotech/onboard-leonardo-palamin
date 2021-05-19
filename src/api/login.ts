@@ -1,7 +1,7 @@
 import { getRepository } from "typeorm";
 import { User } from "./user";
 import crypto from "crypto";
-import { AuthError, NotFoundError } from "../utils/error-handling";
+import { AuthError } from "../utils/error-handling";
 import { validatePassword } from "../utils/password-validator";
 import jwt from "jsonwebtoken";
 
@@ -13,7 +13,7 @@ export const validateLogin = async (email: string, password: string, rememberMe?
   const userId = user?.id;
 
   if (!user) {
-    throw new NotFoundError("Credenciais inválidas. Por favor, tente novamente.");
+    throw new AuthError("Email e/ou senha inválidos. Por favor, tente novamente.");
   }
 
   validatePassword(password);

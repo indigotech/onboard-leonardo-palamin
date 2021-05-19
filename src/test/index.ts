@@ -35,9 +35,9 @@ describe("Mutation: createUser", () => {
         }
       }
     `;
-    const validToken = jwt.sign({ id: 9 }, String(process.env.JWT_SECRET), { expiresIn: "1d" });
+    const validToken = jwt.sign({ id: 10 }, String(process.env.JWT_SECRET), { expiresIn: "1d" });
 
-    it("Says user is not loged in", async () => {
+    it("Says user is not logged in", async () => {
       const jwt = "";
       const createUserMutationVariables = {
         user: {
