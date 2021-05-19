@@ -6,6 +6,7 @@ import { validateEmail } from "./utils/email-being-used-validator";
 import crypto from "crypto";
 import { UserInput, LoginInput } from "./schema/types";
 import { validateLogin } from "./api/login";
+import { validateToken } from "./utils/validate-token";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -14,7 +15,9 @@ const resolverMap: IResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: UserInput }) => {
+    createUser: async (_parent: any, { user: args }: { user: UserInput }, context: any) => {
+      validateToken(context.jwt);
+
       const user = new User();
       user.name = args.name;
       user.email = args.email;
