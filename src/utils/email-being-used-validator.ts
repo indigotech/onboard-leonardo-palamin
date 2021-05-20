@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
-import { User } from "../data/db/entity/user";
-import { AuthError } from "./error-handling";
+import { User } from "@data/db/entity/user";
+import { AuthError } from "@utils/error-handling";
 
 export const validateEmail = async (email: string) => {
   const repository = getRepository(User);

@@ -1,4 +1,4 @@
-import { AuthError } from "./error-handling";
+import { AuthError } from "@utils/error-handling";
 import jwt from "jsonwebtoken";
 
 export const validateToken = (token: string) => {

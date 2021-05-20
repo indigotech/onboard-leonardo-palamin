@@ -11,6 +11,19 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@api": ["./api"],
+      "@api/*": ["./api/*"],
+      "@data": ["./data"],
+      "@data/*": ["./data/*"],
+      "@seed": ["./seed"],
+      "@seed/*": ["./seed/*"],
+      "@test": ["./test"],
+      "@test/*": ["./test/*"],
+      "@utils": ["./utils"],
+      "@utils/*": ["./utils/*"]
+    }
   }
 }

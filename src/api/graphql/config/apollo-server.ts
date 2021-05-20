@@ -4,10 +4,11 @@ import depthLimit from "graphql-depth-limit";
 import { createServer } from "http";
 import compression from "compression";
 import cors from "cors";
-import schema from "../schema/schema";
 import "reflect-metadata";
-import { Database } from "../../../data/db/config/database";
-import { formatError } from "../../../utils/error-handling";
+
+import schema from "@api/graphql/schema/schema";
+import { Database } from "@data/db/config/database";
+import { formatError } from "@utils/error-handling";
 
 export const setupServer = async () => {
   await Database.config();
