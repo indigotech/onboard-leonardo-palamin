@@ -6,7 +6,7 @@ import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
 import jwt from "jsonwebtoken";
 
-export const idForTest = 19;
+export const idForTest = 1;
 
 describe("Mutation: createUser", () => {
   afterEach(async () => {
