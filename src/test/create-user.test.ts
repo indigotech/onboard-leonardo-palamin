@@ -2,16 +2,15 @@ import { expect } from "chai";
 import crypto from "crypto";
 import { getRepository } from "typeorm";
 import { User } from "../data/db/entity/user";
-import { setupServer } from "../api/graphql/config/apollo-server";
 import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
 import jwt from "jsonwebtoken";
 
-export const idForTest = 19
+export const idForTest = 19;
 
 describe("Mutation: createUser", () => {
-  before(async () => {
-    await setupServer();
+  afterEach(async () => {
+    await getRepository(User).delete({});
   });
 
   const createUserMutation = gql`
@@ -84,14 +83,23 @@ describe("Mutation: createUser", () => {
   });
 
   it("Prevents repeated email creation", async () => {
-    const repeatedEmailVars = {
+    const ferstEmailVars = {
       user: {
-        name: "Leo Again",
+        name: "Leo",
         email: "leonardo.palamim@taqtile.com.br",
         password: "23er22323",
         birthDate: "31-03-1998",
       },
     };
+    const repeatedEmailVars = {
+      user: {
+        name: "Double Leo",
+        email: "leonardo.palamim@taqtile.com.br",
+        password: "23er22323",
+        birthDate: "31-03-1998",
+      },
+    };
+    await postGraphQL(createUserMutation, repeatedEmailVars, validToken);
     const res = await postGraphQL(createUserMutation, repeatedEmailVars, validToken);
     expect(res.body.errors[0].message).to.be.eq(
       "Este endereço de email já está sendo usado. Por favor, utilize outro."
