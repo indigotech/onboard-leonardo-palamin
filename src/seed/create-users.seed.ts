@@ -1,6 +1,6 @@
-import { setupServer } from "../api/graphql/config/apollo-server";
+import { setupServer } from "@api/graphql/config/apollo-server";
 import faker from "faker";
-import { User } from "../data/db/entity/user";
+import { User } from "@data/db/entity/user";
 import { getRepository } from "typeorm";
 
 const CreateUserSeed = async () => {
