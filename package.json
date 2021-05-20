@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc . && ncp src/schema dist/schema",
-    "start:dev": "nodemon 'src/starter.ts' --exec 'ts-node' src/starter.ts -e ts,graphql",
+    "start:dev": "nodemon -r tsconfig-paths/register 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "test": "TEST_RUNNING=TRUE mocha 'src/test/index.ts' --require ts-node/register"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "jsonwebtoken": "8.5.1",
     "pg": "8.6.0",
     "reflect-metadata": "0.1.13",
+    "tsconfig-paths": "3.9.0",
     "typeorm": "0.2.32"
   },
   "devDependencies": {

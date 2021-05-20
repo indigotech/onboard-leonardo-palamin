@@ -1,4 +1,4 @@
-import { AuthError } from "./error-handling";
+import { AuthError } from "@utils/error-handling";
 
 export const validatePassword = (password: string) => {
   if (password.length < 7 || password.search(/[a-zA-Z]/) === -1 || password.search(/\d/) === -1) {

@@ -1,6 +1,7 @@
 import { createConnection } from "typeorm";
-import { User } from "../api";
 import dotenv from "dotenv";
+
+import { User } from "@data/db/entity/user";
 
 dotenv.config({ path: process.env.TEST_RUNNING === "TRUE" ? "./.test.env" : "./.env" });
 
