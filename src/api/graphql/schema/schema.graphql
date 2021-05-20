@@ -1,8 +1,12 @@
-input UserInput {
+input CreateUserInput {
   name: String!
   email: String!
   password: String!
   birthDate: String
+}
+
+input UserInput {
+  id: ID!
 }
 
 type User {
@@ -25,9 +29,10 @@ type Login {
 
 type Query {
   helloWorld: String!
+  user(user: UserInput): User
 }
 
 type Mutation {
-  createUser(user: UserInput): User
+  createUser(user: CreateUserInput): User
   login(data: LoginInput): Login
 }

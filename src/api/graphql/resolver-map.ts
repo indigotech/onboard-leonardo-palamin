@@ -2,21 +2,32 @@ import { IResolvers } from "graphql-tools";
 import { getRepository } from "typeorm";
 import crypto from "crypto";
 
-import { UserInput, LoginInput } from "@api/graphql/schema/types";
+import { CreateUserInput, UserInput, LoginInput } from "@api/graphql/schema/types";
 import { validateLogin } from "@api/graphql/login";
 import { User } from "@data/db/entity/user";
 import { validatePassword } from "@utils/password-validator";
 import { validateEmail } from "@utils/email-being-used-validator";
 import { validateToken } from "@utils/validate-token";
+import { NotFoundError } from "@utils/error-handling";
 
 const resolverMap: IResolvers = {
   Query: {
     helloWorld(_: void): string {
       return `Hello, onboard!`;
     },
+    user: async (_parent: any, { user: args }: { user: UserInput }, context: any) => {
+      validateToken(context.jwt);
+
+      const user = getRepository(User).findOne(args.id);
+      if (!user) {
+        throw new NotFoundError("Usuário não encontrado.");
+      }
+      return user;
+    },
   },
+
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: UserInput }, context: any) => {
+    createUser: async (_parent: any, { user: args }: { user: CreateUserInput }, context: any) => {
       validateToken(context.jwt);
 
       const user = new User();
