@@ -1,6 +1,7 @@
 import { expect } from "chai";
-import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
+
+import { postGraphQL } from "@test/post-graphql";
 
 describe("Query: helloWorld", () => {
   it("Query 'hello' responds with Hello, Onboard!", async () => {

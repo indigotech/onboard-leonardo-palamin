@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { postGraphQL } from "./post-graphql";
 import { gql } from "graphql-request";
 import jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
+
 import { User } from "@data/db/entity/user";
+import { postGraphQL } from "@test/post-graphql";
 
 describe("Query: User", async () => {
   afterEach(async () => {

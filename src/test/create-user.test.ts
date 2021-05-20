@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import crypto from "crypto";
 import { getRepository } from "typeorm";
-import { User } from "../data/db/entity/user";
-import { postGraphQL } from "./post-graphql";
+import { User } from "@data/db/entity/user";
+import { postGraphQL } from "@test/post-graphql";
 import { gql } from "graphql-request";
 import jwt from "jsonwebtoken";
 
