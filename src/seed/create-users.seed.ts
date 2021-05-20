@@ -5,6 +5,7 @@ import { getRepository } from "typeorm";
 
 const CreateUserSeed = async () => {
   await setupServer();
+  var usersArray = []
 
   for (var i = 0; i < 50; i++) {
     const newUser = new User();
@@ -13,9 +14,12 @@ const CreateUserSeed = async () => {
     newUser.password = faker.internet.password();
     newUser.birthDate = String(faker.date.past());
 
-    await getRepository(User).save(newUser);
+    usersArray.push(newUser);
    
   }
+
+  await getRepository(User).save(usersArray);
+
 };
 
 CreateUserSeed();
