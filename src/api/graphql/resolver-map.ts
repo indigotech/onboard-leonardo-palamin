@@ -8,6 +8,7 @@ import { User } from "@data/db/entity/user";
 import { validatePassword } from "@utils/password-validator";
 import { validateEmail } from "@utils/email-being-used-validator";
 import { validateToken } from "@utils/validate-token";
+import { NotFoundError } from "@utils/error-handling";
 
 const resolverMap: IResolvers = {
   Query: {
