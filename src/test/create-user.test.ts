@@ -83,14 +83,6 @@ describe("Mutation: createUser", () => {
   });
 
   it("Prevents repeated email creation", async () => {
-    const ferstEmailVars = {
-      user: {
-        name: "Leo",
-        email: "leonardo.palamim@taqtile.com.br",
-        password: "23er22323",
-        birthDate: "31-03-1998",
-      },
-    };
     const repeatedEmailVars = {
       user: {
         name: "Double Leo",
