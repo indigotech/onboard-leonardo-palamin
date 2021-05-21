@@ -1,4 +1,4 @@
-input CreateUserInput {
+input UserCreateInput {
   name: String!
   email: String!
   password: String!
@@ -9,11 +9,21 @@ input UserInput {
   id: ID!
 }
 
+input UsersInput {
+  take: Int = 10
+  skip: Int = 0
+}
+
 type User {
   id: ID!
   name: String!
   email: String!
   birthDate: String!
+  dog: [Dog]
+}
+
+type Users {
+  users: [User!]
 }
 
 input LoginInput {
@@ -27,13 +37,18 @@ type Login {
   token: String!
 }
 
+type Dog {
+  id: ID!
+  name: String!
+}
+
 type Query {
   helloWorld: String!
   user(user: UserInput): User
-  users: User
+  users: Users
 }
 
 type Mutation {
-  createUser(user: CreateUserInput): User
+  createUser(user: UserCreateInput): User
   login(data: LoginInput): Login
 }

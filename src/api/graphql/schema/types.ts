@@ -1,4 +1,4 @@
-export interface CreateUserInput {
+export interface UserCreateInput {
   name: string;
   email: string;
   password: string;
@@ -14,6 +14,14 @@ export interface User {
   name: string;
   email: string;
   birthDate: string;
+  dog: Dog;
+}
+
+export interface Users {
+  users: User[];
+  count: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface UsersInput {
@@ -30,4 +38,10 @@ export interface LoginInput {
 export interface LoginResponse {
   user: User;
   token: string;
+}
+
+export interface Dog {
+  id: number;
+  name: string;
+  user: User;
 }

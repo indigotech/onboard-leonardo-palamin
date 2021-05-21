@@ -1,5 +1,5 @@
 import { User } from "@data/db/entity/user";
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from "typeorm";
 
 @Entity()
 export class Dog {
@@ -9,7 +9,6 @@ export class Dog {
   @Column()
   name!: string;
 
-  @OneToOne(() => Dog, (dog) => dog.user)
-  dog!: Dog;
+  @ManyToOne(() => User, (user: User) => user.dog, { onDelete: 'CASCADE' })
   user!: User;
 }

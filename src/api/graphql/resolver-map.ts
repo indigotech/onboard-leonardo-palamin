@@ -2,7 +2,7 @@ import { IResolvers } from "graphql-tools";
 import { getRepository } from "typeorm";
 import crypto from "crypto";
 
-import { CreateUserInput, UserInput, UsersInput, LoginInput } from "@api/graphql/schema/types";
+import { UserCreateInput, UserInput, UsersInput, LoginInput } from "@api/graphql/schema/types";
 import { validateLogin } from "@api/graphql/login";
 import { User } from "@data/db/entity/user";
 import { validatePassword } from "@utils/password-validator";
@@ -25,35 +25,17 @@ const resolverMap: IResolvers = {
       return user;
     },
     users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
-      validateToken(context);
-      const skip = args?.skip ?? 0;
-      const take = args?.take ?? 10;
-
-      if (skip && skip < 0) {
-        throw new AuthError(undefined, "`skip` should not be negative");
+      /* validateToken(context); */
+      const users = await getRepository(User).find();
+      if (!users) {
+        throw new NotFoundError("Usuários não encontrados");
       }
-
-      if (take && take <= 0) {
-        throw new AuthError(undefined, "`take` should be positive not null");
-      }
-
-      const count = await getRepository(User).count();
-      const hasPreviousPage = skip > 0;
-      const hasNextPage = skip + take < count;
-
-      const users = await getRepository(User).find({
-        order: { name: "ASC" },
-        take,
-        skip,
-        relations: ["dog"],
-      });
-
-      return { users, count, hasNextPage, hasPreviousPage };
+      return users;
     },
   },
 
   Mutation: {
-    createUser: async (_parent: any, { user: args }: { user: CreateUserInput }, context: any) => {
+    createUser: async (_parent: any, { user: args }: { user: UserCreateInput }, context: any) => {
       /* validateToken(context.jwt); */
 
       const user = new User();
