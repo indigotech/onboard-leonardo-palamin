@@ -16,6 +16,11 @@ export interface User {
   birthDate: string;
 }
 
+export interface UsersInput {
+  take?: number;
+  skip?: number;
+}
+
 export interface LoginInput {
   email: string;
   password: string;

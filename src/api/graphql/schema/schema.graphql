@@ -30,6 +30,7 @@ type Login {
 type Query {
   helloWorld: String!
   user(user: UserInput): User
+  users: User
 }
 
 type Mutation {

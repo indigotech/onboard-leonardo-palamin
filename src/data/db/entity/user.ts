@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Dog } from "@data/db/entity/dog";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 
 @Entity()
 export class User {
@@ -16,4 +17,8 @@ export class User {
 
   @Column()
   birthDate!: string;
+
+  @OneToOne(() => User, (user) => user.dog)
+  dog!: Dog;
+  user!: User;
 }
