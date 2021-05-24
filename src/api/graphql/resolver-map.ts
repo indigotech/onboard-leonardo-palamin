@@ -30,8 +30,8 @@ const resolverMap: IResolvers = {
       if (!users || users.length === 0) {
         throw new NotFoundError("Usuários não encontrados");
       }
-      users.sort((a,b) => a.name.localeCompare(b.name));
-      const filteredUsers = users.slice(0, args);
+      users.sort((a, b) => a.name.localeCompare(b.name));
+      const filteredUsers = users.slice(0, args ? args : 50);
       return filteredUsers;
     },
   },

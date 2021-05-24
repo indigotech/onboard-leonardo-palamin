@@ -27,7 +27,6 @@ type Login {
   token: String!
 }
 
-
 type Query {
   helloWorld: String!
   user(user: UserInput): User
