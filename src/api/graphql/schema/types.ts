@@ -14,7 +14,6 @@ export interface User {
   name: string;
   email: string;
   birthDate: string;
-  dog: Dog;
 }
 
 export interface Users {
@@ -38,10 +37,4 @@ export interface LoginInput {
 export interface LoginResponse {
   user: User;
   token: string;
-}
-
-export interface Dog {
-  id: number;
-  name: string;
-  user: User;
 }

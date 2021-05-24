@@ -9,21 +9,11 @@ input UserInput {
   id: ID!
 }
 
-input UsersInput {
-  take: Int = 10
-  skip: Int = 0
-}
-
 type User {
   id: ID!
   name: String!
   email: String!
   birthDate: String!
-  dog: [Dog]
-}
-
-type Users {
-  users: [User!]
 }
 
 input LoginInput {
@@ -37,15 +27,11 @@ type Login {
   token: String!
 }
 
-type Dog {
-  id: ID!
-  name: String!
-}
 
 type Query {
   helloWorld: String!
   user(user: UserInput): User
-  users: Users
+  users(filter: Int): [User]
 }
 
 type Mutation {

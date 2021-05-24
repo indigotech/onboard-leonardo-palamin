@@ -8,7 +8,7 @@ import { User } from "@data/db/entity/user";
 import { validatePassword } from "@utils/password-validator";
 import { validateEmail } from "@utils/email-being-used-validator";
 import { validateToken } from "@utils/validate-token";
-import { AuthError, NotFoundError } from "@utils/error-handling";
+import { NotFoundError } from "@utils/error-handling";
 
 const resolverMap: IResolvers = {
   Query: {
@@ -24,19 +24,21 @@ const resolverMap: IResolvers = {
       }
       return user;
     },
-    users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
-      /* validateToken(context); */
+    users: async (_: any, { filter: args }: { filter: number }, context: any) => {
+      validateToken(context.jwt);
       const users = await getRepository(User).find();
-      if (!users) {
+      if (!users || users.length === 0) {
         throw new NotFoundError("Usuários não encontrados");
       }
-      return users;
+      users.sort((a,b) => a.name.localeCompare(b.name));
+      const filteredUsers = users.slice(0, args);
+      return filteredUsers;
     },
   },
 
   Mutation: {
     createUser: async (_parent: any, { user: args }: { user: UserCreateInput }, context: any) => {
-      /* validateToken(context.jwt); */
+      validateToken(context.jwt);
 
       const user = new User();
       user.name = args.name;

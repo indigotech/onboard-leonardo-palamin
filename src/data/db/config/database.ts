@@ -14,7 +14,7 @@ export class Database {
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [__dirname + "/data/db/entity/*.ts"],
+      entities: [User],
       synchronize: true,
     });
     console.log(process.env.DATABASE_CONNECTED_MESSAGE);

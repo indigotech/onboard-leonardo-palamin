@@ -1,5 +1,4 @@
 import { setupServer } from "@api/graphql/config/apollo-server";
-import { getRepository } from "typeorm";
 
 describe("Run tests", () => {
   before(async () => {

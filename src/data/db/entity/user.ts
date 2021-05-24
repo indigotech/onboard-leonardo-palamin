@@ -1,4 +1,3 @@
-import { Dog } from "@data/db/entity/dog";
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 
 @Entity()
@@ -17,7 +16,4 @@ export class User {
 
   @Column()
   birthDate!: string;
-
-  @OneToMany(() => Dog, (dog: Dog) => dog.user, { cascade: true })
-  dog!: Dog[];
 }
