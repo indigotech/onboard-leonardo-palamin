@@ -5,6 +5,7 @@ import { getRepository, getConnection } from "typeorm";
 
 import { User } from "@data/db/entity/user";
 import { postGraphQL } from "@test/post-graphql";
+import { Address } from "@data/db/entity/address";
 
 describe("Query: User", async () => {
   afterEach(async () => {
@@ -18,6 +19,9 @@ describe("Query: User", async () => {
         name
         email
         birthDate
+        address {
+          cep
+        }
       }
     }
   `;
@@ -40,9 +44,21 @@ describe("Query: User", async () => {
 
     const user = await getRepository(User).save(createdUser);
 
+    const adress1 = new Address();
+    (adress1.cep = "90354765"),
+      (adress1.street = "Av. Doutor Arnaldo"),
+      (adress1.streetNumber = 2194),
+      (adress1.complement = "Taqtile"),
+      (adress1.neighborhood = "Sumaré"),
+      (adress1.city = "São Paulo"),
+      (adress1.state = "SP"),
+      (adress1.userId = user.id);
+
+    await getRepository(Address).save(adress1);
+
     const userQueryVariables = {
       user: {
-        id: user?.id,
+        id: user.id,
       },
     };
 
@@ -53,6 +69,11 @@ describe("Query: User", async () => {
           name: "Leo",
           email: testUser.email,
           birthDate: testUser.birthDate,
+          address: [
+            {
+              cep: "90354765",
+            },
+          ],
         },
       },
     });
@@ -60,6 +81,9 @@ describe("Query: User", async () => {
     expect(res.body.data.user.name).to.be.eq("Leo");
     expect(res.body.data.user.email).to.be.eq(testUser.email);
     expect(res.body.data.user.birthDate).to.be.eq(testUser.birthDate);
+
+    const updatedUser = getRepository(User).findOne( { id: user.id}, { relations: ["address"] } )
+    expect(res.body.data.user.address[0].cep).to.be.eq((await updatedUser).address[0].cep);
   });
 
   it("Does not find user in database", async () => {

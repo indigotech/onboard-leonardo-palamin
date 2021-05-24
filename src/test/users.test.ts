@@ -5,6 +5,7 @@ import { getRepository, getConnection } from "typeorm";
 
 import { User } from "@data/db/entity/user";
 import { postGraphQL } from "@test/post-graphql";
+import { Address } from "@data/db/entity/address";
 
 describe("Query: Users", async () => {
   afterEach(async () => {
@@ -22,6 +23,9 @@ describe("Query: Users", async () => {
           name
           email
           birthDate
+          address {
+            cep
+          }
         }
       }
     }
@@ -92,6 +96,29 @@ describe("Query: Users", async () => {
       data: {
         start: 0,
         limit: 2,
+        users: {
+          count: 3,
+          previusPage: false,
+          nextPage: true,
+          users: [
+            {
+              name: "Amanda",
+              address: [
+                {
+                  cep: "90354730"
+                }
+              ]
+            },
+            {
+              name: "Leo",
+              address: [
+                {
+                  cep: "90354765"
+                }
+              ]
+            },
+          ],
+        },
       },
     };
     const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
@@ -143,6 +170,8 @@ describe("Query: Users", async () => {
     expect(res.body.data.users.users[0]).to.be.eq(undefined);
     expect(res.body.data.users.previusPage).to.be.eq(true);
     expect(res.body.data.users.nextPage).to.be.eq(false);
+    expect(res.body.data.users.users[0].name).to.be.eq("Amanda");
+    expect(res.body.data.users.users[0].address[0].cep).to.be.eq("90354730");
   });
 
   it("Does not find users in database", async () => {
