@@ -33,7 +33,7 @@ describe("Query: Users", async () => {
 
   const validToken = jwt.sign({ id: 1 }, String(process.env.JWT_SECRET), { expiresIn: "1d" });
 
-  it("Gets user from database", async () => {
+  it("Gets users from database with correct pagination", async () => {
     const testUser = {
       name: "Leo",
       email: "leonardo.palamim@taqtile.com.br",
