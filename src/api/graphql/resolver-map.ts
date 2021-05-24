@@ -26,10 +26,12 @@ const resolverMap: IResolvers = {
     },
     users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
       validateToken(context.jwt);
+
       const users = await getRepository(User).find();
       if (!users) {
         throw new NotFoundError("Usuários não encontrados");
       }
+      
       const start = args.start ?? 0;
       const filter = args.filter ?? 10;
 
@@ -40,9 +42,9 @@ const resolverMap: IResolvers = {
       const previusPage = start > 0;
       const nextPage = start + filter < numberOfUsers;
 
-      const response = { count: numberOfUsers, previusPage: previusPage, nextPage: nextPage, users: filteredUsers };
+      const usersResponse = { count: numberOfUsers, previusPage: previusPage, nextPage: nextPage, users: filteredUsers };
 
-      return response;
+      return usersResponse;
     },
   },
 
