@@ -16,6 +16,18 @@ type User {
   birthDate: String!
 }
 
+input UsersInput {
+  filter: Int
+  start: Int
+}
+
+type UsersResponse {
+  count: Int
+  previusPage: Boolean
+  nextPage: Boolean
+  users: [User]
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -30,7 +42,7 @@ type Login {
 type Query {
   helloWorld: String!
   user(user: UserInput): User
-  users(filter: Int): [User]
+  users(data: UsersInput): UsersResponse
 }
 
 type Mutation {

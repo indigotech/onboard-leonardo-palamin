@@ -16,16 +16,9 @@ export interface User {
   birthDate: string;
 }
 
-export interface Users {
-  users: User[];
-  count: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
 export interface UsersInput {
-  take?: number;
-  skip?: number;
+  filter?: number;
+  start?: number;
 }
 
 export interface LoginInput {

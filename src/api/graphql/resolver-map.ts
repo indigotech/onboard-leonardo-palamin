@@ -24,15 +24,25 @@ const resolverMap: IResolvers = {
       }
       return user;
     },
-    users: async (_: any, { filter: args }: { filter: number }, context: any) => {
+    users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
       validateToken(context.jwt);
       const users = await getRepository(User).find();
-      if (!users || users.length === 0) {
+      if (!users) {
         throw new NotFoundError("Usuários não encontrados");
       }
-      users.sort((a, b) => a.name.localeCompare(b.name));
-      const filteredUsers = users.slice(0, args ? args : 50);
-      return filteredUsers;
+      const start = args.start ?? 0;
+      const filter = args.filter ?? 10;
+
+      const numberOfUsers = users.length;
+      const orderedUsers = users.sort((a, b) => a.name.localeCompare(b.name));
+      const filteredUsers = orderedUsers.splice(start, filter);
+
+      const previusPage = start > 0;
+      const nextPage = start + filter < numberOfUsers;
+
+      const response = { count: numberOfUsers, previusPage: previusPage, nextPage: nextPage, users: filteredUsers };
+
+      return response;
     },
   },
 
