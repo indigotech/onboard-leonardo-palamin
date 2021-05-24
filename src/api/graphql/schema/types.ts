@@ -1,8 +1,32 @@
+export interface AdressType {
+  id: number;
+  cep: string;
+  street: string;
+  streetNumber: number;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  userId: number;
+}
+
+export interface AddressCreateInput {
+  cep: string;
+  street: string;
+  streetNumber: number;
+  complement?: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  userId: number;
+}
+
 export interface UserCreateInput {
   name: string;
   email: string;
   password: string;
   birthDate: string;
+  adress: AdressType[]
 }
 
 export interface UserInput {
