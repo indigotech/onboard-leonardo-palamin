@@ -48,8 +48,10 @@ describe("Address", () => {
 
     const newAddress2 = await getRepository(Address).save(adress2);
 
-    expect(newAddress1.userId).to.be.eq(userId);
-    expect(newAddress2.userId).to.be.eq(userId);
+    const updatedUser = await getRepository(User).findOne({ id: userId}, { relations: ["address"]});
+
+    expect(updatedUser.address[0].id).to.be.eq(newAddress1.id);
+    expect(updatedUser.address[1].id).to.be.eq(newAddress2.id);
 
   });
 });
