@@ -25,13 +25,12 @@ describe("Query: User", async () => {
   const validToken = jwt.sign({ id: 1 }, String(process.env.JWT_SECRET), { expiresIn: "1d" });
 
   it("Gets user from database", async () => {
-
     const testUser = {
       name: "Leo",
       email: "leonardo.palamim@taqtile.com.br",
       password: "23er22323",
-      birthDate: "31-03-1998"
-    }
+      birthDate: "31-03-1998",
+    };
 
     const createdUser = new User();
     createdUser.name = testUser.name;
@@ -70,7 +69,6 @@ describe("Query: User", async () => {
       },
     };
     const res = await postGraphQL(userQuery, userQueryVariables, validToken);
-    expect(res.body.errors[0].message).to.be.eq("Usuário não encontrado.");
-    expect(res.body.errors[0].code).to.be.eq(404);
+    expect(res.body.data.user).to.be.eq(null);
   });
 });

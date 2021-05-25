@@ -27,7 +27,7 @@ describe("Query: Users", async () => {
   const usersQueryVariables = {
     data: {
       start: 0,
-      filter: 2,
+      limit: 2,
     },
   };
 
