@@ -20,7 +20,14 @@ describe("Query: User", async () => {
         email
         birthDate
         address {
+          id
           cep
+          street
+          streetNumber
+          complement
+          neighborhood
+          city
+          state
         }
       }
     }
@@ -62,28 +69,24 @@ describe("Query: User", async () => {
       },
     };
 
-    const res = await postGraphQL(userQuery, userQueryVariables, validToken).expect({
-      data: {
-        user: {
-          id: String(user.id),
-          name: "Leo",
-          email: testUser.email,
-          birthDate: testUser.birthDate,
-          address: [
-            {
-              cep: "90354765",
-            },
-          ],
-        },
-      },
-    });
+    const res = await postGraphQL(userQuery, userQueryVariables, validToken);
     expect(res.body.data.user.id).to.be.eq(String(user.id));
     expect(res.body.data.user.name).to.be.eq("Leo");
     expect(res.body.data.user.email).to.be.eq(testUser.email);
     expect(res.body.data.user.birthDate).to.be.eq(testUser.birthDate);
 
-    const updatedUser = getRepository(User).findOne( { id: user.id}, { relations: ["address"] } )
-    expect(res.body.data.user.address[0].cep).to.be.eq((await updatedUser).address[0].cep);
+    const updatedUser = await getRepository(User).findOne({ id: user.id }, { relations: ["address"] });
+    expect(res.body.data.user.address[0].cep).to.be.eq(updatedUser.address[0].cep);
+    expect(res.body.data.user.address[0]).to.be.deep.eq({
+      cep: "90354765",
+      city: "São Paulo",
+      complement: "Taqtile",
+      id: String(updatedUser.address[0].id),
+      neighborhood: "Sumaré",
+      state: "SP",
+      street: "Av. Doutor Arnaldo",
+      streetNumber: 2194,
+    });
   });
 
   it("Does not find user in database", async () => {

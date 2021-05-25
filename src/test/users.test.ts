@@ -24,7 +24,15 @@ describe("Query: Users", async () => {
           email
           birthDate
           address {
+            id
             cep
+            street
+            streetNumber
+            complement
+            neighborhood
+            city
+            state
+            userId
           }
         }
       }
@@ -38,18 +46,21 @@ describe("Query: Users", async () => {
     email: "leonardo.palamim@taqtile.com.br",
     password: "23er22323",
     birthDate: "31-03-1998",
+    address: []
   });
   const testUser2 = Object.assign(new User(), {
     name: "Amanda",
     email: "amanda@taqtile.com.br",
     password: "er89er89",
     birthDate: "21-11-1998",
+    address: []
   });
   const testUser3 = Object.assign(new User(), {
     name: "Yugo",
     email: "yugo@taqtile.com.br",
     password: "vf09vf09",
     birthDate: "05-03-1930",
+    address: []
   });
 
   it("Gets users from database with correct pagination", async () => {
@@ -96,29 +107,6 @@ describe("Query: Users", async () => {
       data: {
         start: 0,
         limit: 2,
-        users: {
-          count: 3,
-          previusPage: false,
-          nextPage: true,
-          users: [
-            {
-              name: "Amanda",
-              address: [
-                {
-                  cep: "90354730"
-                }
-              ]
-            },
-            {
-              name: "Leo",
-              address: [
-                {
-                  cep: "90354765"
-                }
-              ]
-            },
-          ],
-        },
       },
     };
     const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
@@ -168,10 +156,6 @@ describe("Query: Users", async () => {
     };
     const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
     expect(res.body.data.users.users[0]).to.be.eq(undefined);
-    expect(res.body.data.users.previusPage).to.be.eq(true);
-    expect(res.body.data.users.nextPage).to.be.eq(false);
-    expect(res.body.data.users.users[0].name).to.be.eq("Amanda");
-    expect(res.body.data.users.users[0].address[0].cep).to.be.eq("90354730");
   });
 
   it("Does not find users in database", async () => {
