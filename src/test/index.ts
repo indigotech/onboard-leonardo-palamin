@@ -5,6 +5,7 @@ describe("Run tests", () => {
     await setupServer();
   });
 
+  require("./address.test");
   require("./create-user.test");
   require("./hello-world.test");
   require("./user.test");
