@@ -18,89 +18,135 @@ describe("Query: Users", async () => {
         previusPage
         nextPage
         users {
+          id
           name
+          email
+          birthDate
         }
       }
     }
   `;
 
-  const usersQueryVariables = {
-    data: {
-      start: 0,
-      limit: 2,
-    },
-  };
-
   const validToken = jwt.sign({ id: 1 }, String(process.env.JWT_SECRET), { expiresIn: "1d" });
 
+  const testUser = Object.assign(new User(), {
+    name: "Leo",
+    email: "leonardo.palamim@taqtile.com.br",
+    password: "23er22323",
+    birthDate: "31-03-1998",
+  });
+  const testUser2 = Object.assign(new User(), {
+    name: "Amanda",
+    email: "amanda@taqtile.com.br",
+    password: "er89er89",
+    birthDate: "21-11-1998",
+  });
+  const testUser3 = Object.assign(new User(), {
+    name: "Yugo",
+    email: "yugo@taqtile.com.br",
+    password: "vf09vf09",
+    birthDate: "05-03-1930",
+  });
+
   it("Gets users from database with correct pagination", async () => {
-    const testUser = {
-      name: "Leo",
-      email: "leonardo.palamim@taqtile.com.br",
-      password: "23er22323",
-      birthDate: "31-03-1998",
-    };
-    const testUser2 = {
-      name: "Amanda",
-      email: "amanda@taqtile.com.br",
-      password: "er89er89",
-      birthDate: "21-11-1998",
-    };
-    const testUser3 = {
-      name: "Yugo",
-      email: "yugo@taqtile.com.br",
-      password: "vf09vf09",
-      birthDate: "05-03-1930",
-    };
-
-    const createdUser1 = new User();
-    createdUser1.name = testUser.name;
-    createdUser1.email = testUser.email;
-    createdUser1.password = testUser.password;
-    createdUser1.birthDate = testUser.birthDate;
-
-    await getRepository(User).save(createdUser1);
-
-    const createdUser2 = new User();
-    createdUser2.name = testUser2.name;
-    createdUser2.email = testUser2.email;
-    createdUser2.password = testUser2.password;
-    createdUser2.birthDate = testUser2.birthDate;
-
-    await getRepository(User).save(createdUser2);
-
-    const createdUser3 = new User();
-    createdUser3.name = testUser3.name;
-    createdUser3.email = testUser3.email;
-    createdUser3.password = testUser3.password;
-    createdUser3.birthDate = testUser3.birthDate;
-
-    await getRepository(User).save(createdUser3);
-
-    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken).expect({
+    const usersQueryVariables = {
       data: {
-        users: {
-          count: 3,
-          previusPage: false,
-          nextPage: true,
-          users: [
-            {
-              name: "Amanda",
-            },
-            {
-              name: "Leo",
-            },
-          ],
-        },
+        start: 0,
+        limit: 3,
       },
-    });
+    };
+
+    await getRepository(User).save([testUser, testUser2, testUser3]);
+
+    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
+    expect(res.body.data.users.count).to.be.eq(3);
+    expect(res.body.data.users.previusPage).to.be.eq(false);
+    expect(res.body.data.users.nextPage).to.be.eq(false);
+
+    expect(res.body.data.users.users[0].id).to.be.eq(String(testUser2.id));
+    expect(res.body.data.users.users[0].name).to.be.eq("Amanda");
+    expect(res.body.data.users.users[0].email).to.be.eq("amanda@taqtile.com.br");
+    expect(res.body.data.users.users[0].birthDate).to.be.eq("21-11-1998");
+
+    expect(res.body.data.users.users[1].id).to.be.eq(String(testUser.id));
+    expect(res.body.data.users.users[1].name).to.be.eq("Leo");
+    expect(res.body.data.users.users[1].email).to.be.eq("leonardo.palamim@taqtile.com.br");
+    expect(res.body.data.users.users[1].birthDate).to.be.eq("31-03-1998");
+
+    expect(res.body.data.users.users[2].id).to.be.eq(String(testUser3.id));
+    expect(res.body.data.users.users[2].name).to.be.eq("Yugo");
+    expect(res.body.data.users.users[2].email).to.be.eq("yugo@taqtile.com.br");
+    expect(res.body.data.users.users[2].birthDate).to.be.eq("05-03-1930");
+  });
+
+  it("Gets correct pagination: case 1", async () => {
+    await getRepository(User).save([testUser, testUser2, testUser3]);
+
+    const usersQueryVariables = {
+      data: {
+        start: 0,
+        limit: 2,
+      },
+    };
+    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
     expect(res.body.data.users.count).to.be.eq(3);
     expect(res.body.data.users.previusPage).to.be.eq(false);
     expect(res.body.data.users.nextPage).to.be.eq(true);
-    expect(res.body.data.users.users[0].name).to.be.eq("Amanda");
+  });
+
+  it("Gets correct pagination: case 2", async () => {
+    await getRepository(User).save([testUser, testUser2, testUser3]);
+
+    const usersQueryVariables = {
+      data: {
+        start: 2,
+        limit: 2,
+      },
+    };
+    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
+    expect(res.body.data.users.count).to.be.eq(3);
+    expect(res.body.data.users.previusPage).to.be.eq(true);
+    expect(res.body.data.users.nextPage).to.be.eq(false);
+  });
+
+  it("Gets correct pagination: case 3", async () => {
+    await getRepository(User).save([testUser, testUser2, testUser3]);
+
+    const usersQueryVariables = {
+      data: {
+        start: 1,
+        limit: 1,
+      },
+    };
+    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
+    expect(res.body.data.users.count).to.be.eq(3);
+    expect(res.body.data.users.previusPage).to.be.eq(true);
+    expect(res.body.data.users.nextPage).to.be.eq(true);
+  });
+
+  it("Returns null for bigger start args", async () => {
+    await getRepository(User).save([testUser, testUser2, testUser3]);
+
+    const usersQueryVariables = {
+      data: {
+        start: 20,
+        limit: 1,
+      },
+    };
+    const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
+    expect(res.body.data.users.users[0]).to.be.eq(undefined);
+    expect(res.body.data.users.previusPage).to.be.eq(true);
+    expect(res.body.data.users.nextPage).to.be.eq(false);
   });
 
   it("Does not find users in database", async () => {
+    const usersQueryVariables = {
+      data: {
+        start: 0,
+        limit: 3,
+      },
+    };
+
     const res = await postGraphQL(usersQuery, usersQueryVariables, validToken);
     expect(res.body.data.users.count).to.be.eq(0);
   });
