@@ -27,13 +27,14 @@ const resolverMap: IResolvers = {
       const start = args.start ?? 0;
       const limit = args.limit ?? 10;
 
+      const usersCount = await getRepository(User).find()
+      const numberOfUsers = usersCount.length
+
       const users = await getRepository(User).find({
         order: { name: "ASC" },
         take: limit,
         skip: start,
       });
-
-      const numberOfUsers = users.length;
 
       const previusPage = start > 0;
       const nextPage = start + limit < numberOfUsers;
