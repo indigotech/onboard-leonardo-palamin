@@ -17,7 +17,7 @@ export interface User {
 }
 
 export interface UsersInput {
-  filter?: number;
+  limit?: number;
   start?: number;
 }
 

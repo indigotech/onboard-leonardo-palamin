@@ -17,7 +17,7 @@ type User {
 }
 
 input UsersInput {
-  filter: Int
+  limit: Int
   start: Int
 }
 

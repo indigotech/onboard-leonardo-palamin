@@ -19,30 +19,31 @@ const resolverMap: IResolvers = {
       validateToken(context.jwt);
 
       const user = await getRepository(User).findOne(args.id);
-      if (!user) {
-        throw new NotFoundError("Usuário não encontrado.");
-      }
       return user;
     },
     users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
       validateToken(context.jwt);
 
-      const users = await getRepository(User).find();
-      if (!users) {
-        throw new NotFoundError("Usuários não encontrados");
-      }
-      
       const start = args.start ?? 0;
-      const filter = args.filter ?? 10;
+      const limit = args.limit ?? 10;
+
+      const users = await getRepository(User).find({
+        order: { name: "ASC" },
+        take: limit,
+        skip: start,
+      });
 
       const numberOfUsers = users.length;
-      const orderedUsers = users.sort((a, b) => a.name.localeCompare(b.name));
-      const filteredUsers = orderedUsers.splice(start, filter);
 
       const previusPage = start > 0;
-      const nextPage = start + filter < numberOfUsers;
+      const nextPage = start + limit < numberOfUsers;
 
-      const usersResponse = { count: numberOfUsers, previusPage: previusPage, nextPage: nextPage, users: filteredUsers };
+      const usersResponse = {
+        count: numberOfUsers,
+        previusPage: previusPage,
+        nextPage: nextPage,
+        users: users,
+      };
 
       return usersResponse;
     },
