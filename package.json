@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc . && ncp src/schema dist/schema",
-    "start:dev": "nodemon -r tsconfig-paths/register 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
+    "dev": "nodemon -r tsconfig-paths/register 'src/index.ts' --exec 'ts-node' src/index.ts -e ts,graphql",
     "seed": "'ts-node' -r tsconfig-paths/register src/seed/create-users.seed.ts",
     "test": "TEST_RUNNING=TRUE mocha -r tsconfig-paths/register 'src/test/index.ts' --require ts-node/register"
   },

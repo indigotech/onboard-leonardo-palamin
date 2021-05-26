@@ -7,7 +7,7 @@ import cors from "cors";
 import "reflect-metadata";
 
 import schema from "@api/graphql/schema/schema";
-import { Database } from "@data/db/config/database";
+import { Database } from "@data/db/database";
 import { formatError } from "@utils/error-handling";
 
 export const setupServer = async () => {
