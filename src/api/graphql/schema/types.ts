@@ -1,4 +1,4 @@
-export interface CreateUserInput {
+export interface UserCreateInput {
   name: string;
   email: string;
   password: string;
@@ -14,6 +14,11 @@ export interface User {
   name: string;
   email: string;
   birthDate: string;
+}
+
+export interface UsersInput {
+  limit?: number;
+  start?: number;
 }
 
 export interface LoginInput {
