@@ -63,20 +63,26 @@ describe("Query: Users", async () => {
     expect(res.body.data.users.previusPage).to.be.eq(false);
     expect(res.body.data.users.nextPage).to.be.eq(false);
 
-    expect(res.body.data.users.users[0].id).to.be.eq(String(testUser2.id));
-    expect(res.body.data.users.users[0].name).to.be.eq("Amanda");
-    expect(res.body.data.users.users[0].email).to.be.eq("amanda@taqtile.com.br");
-    expect(res.body.data.users.users[0].birthDate).to.be.eq("21-11-1998");
+    expect(res.body.data.users.users[0]).to.be.deep.eq({
+      id: String(testUser2.id),
+      name: "Amanda",
+      email: "amanda@taqtile.com.br",
+      birthDate: "21-11-1998",
+    });
 
-    expect(res.body.data.users.users[1].id).to.be.eq(String(testUser.id));
-    expect(res.body.data.users.users[1].name).to.be.eq("Leo");
-    expect(res.body.data.users.users[1].email).to.be.eq("leonardo.palamim@taqtile.com.br");
-    expect(res.body.data.users.users[1].birthDate).to.be.eq("31-03-1998");
+    expect(res.body.data.users.users[1]).to.be.deep.eq({
+      id: String(testUser.id),
+      name: "Leo",
+      email: "leonardo.palamim@taqtile.com.br",
+      birthDate: "31-03-1998",
+    });
 
-    expect(res.body.data.users.users[2].id).to.be.eq(String(testUser3.id));
-    expect(res.body.data.users.users[2].name).to.be.eq("Yugo");
-    expect(res.body.data.users.users[2].email).to.be.eq("yugo@taqtile.com.br");
-    expect(res.body.data.users.users[2].birthDate).to.be.eq("05-03-1930");
+    expect(res.body.data.users.users[2]).to.be.deep.eq({
+      id: String(testUser3.id),
+      name: "Yugo",
+      email: "yugo@taqtile.com.br",
+      birthDate: "05-03-1930",
+    });
   });
 
   it("Gets correct pagination: case 1", async () => {

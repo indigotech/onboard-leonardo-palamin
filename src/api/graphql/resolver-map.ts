@@ -27,7 +27,7 @@ const resolverMap: IResolvers = {
       const start = args.start;
       const limit = args.limit;
 
-      const numberOfUsers = await getRepository(User).count()
+      const numberOfUsers = await getRepository(User).count();
 
       const users = await getRepository(User).find({
         order: { name: "ASC" },
@@ -42,6 +42,8 @@ const resolverMap: IResolvers = {
         count: numberOfUsers,
         previusPage: previusPage,
         nextPage: nextPage,
+        start: start,
+        limit: limit,
         users: users,
       };
 
