@@ -5,6 +5,10 @@ import { User } from "@data/db/entity/user";
 import { Address } from "@data/db/entity/address";
 
 describe("Address", () => {
+  afterEach(async () => {
+    await getRepository(User).delete({});
+  });
+
 
   const user = {
     name: "Leo",

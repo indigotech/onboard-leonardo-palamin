@@ -18,7 +18,10 @@ const resolverMap: IResolvers = {
     user: async (_parent: any, { user: args }: { user: UserInput }, context: any) => {
       validateToken(context.jwt);
 
-      const user = await getRepository(User).findOne(args.id);
+      const user = await getRepository(User).findOne({ id: args.id }, { relations: ["address"] });
+      if (!user) {
+        throw new NotFoundError("Usuário não encontrado.");
+      }
       return user;
     },
     users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
@@ -33,6 +36,7 @@ const resolverMap: IResolvers = {
         order: { name: "ASC" },
         take: limit,
         skip: start,
+        relations: ["address"],
       });
 
       const previusPage = start > 0;

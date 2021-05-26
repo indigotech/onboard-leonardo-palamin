@@ -5,6 +5,7 @@ import { getRepository, getConnection } from "typeorm";
 
 import { User } from "@data/db/entity/user";
 import { postGraphQL } from "@test/post-graphql";
+import { Address } from "@data/db/entity/address";
 
 describe("Query: User", async () => {
   afterEach(async () => {
@@ -18,6 +19,16 @@ describe("Query: User", async () => {
         name
         email
         birthDate
+        address {
+          id
+          cep
+          street
+          streetNumber
+          complement
+          neighborhood
+          city
+          state
+        }
       }
     }
   `;
@@ -40,26 +51,42 @@ describe("Query: User", async () => {
 
     const user = await getRepository(User).save(createdUser);
 
+    const adress1 = new Address();
+    (adress1.cep = "90354765"),
+      (adress1.street = "Av. Doutor Arnaldo"),
+      (adress1.streetNumber = 2194),
+      (adress1.complement = "Taqtile"),
+      (adress1.neighborhood = "Sumaré"),
+      (adress1.city = "São Paulo"),
+      (adress1.state = "SP"),
+      (adress1.userId = user.id);
+
+    await getRepository(Address).save(adress1);
+
     const userQueryVariables = {
       user: {
-        id: user?.id,
+        id: user.id,
       },
     };
 
-    const res = await postGraphQL(userQuery, userQueryVariables, validToken).expect({
-      data: {
-        user: {
-          id: String(user.id),
-          name: "Leo",
-          email: testUser.email,
-          birthDate: testUser.birthDate,
-        },
-      },
-    });
+    const res = await postGraphQL(userQuery, userQueryVariables, validToken);
     expect(res.body.data.user.id).to.be.eq(String(user.id));
     expect(res.body.data.user.name).to.be.eq("Leo");
     expect(res.body.data.user.email).to.be.eq(testUser.email);
     expect(res.body.data.user.birthDate).to.be.eq(testUser.birthDate);
+
+    const updatedUser = await getRepository(User).findOne({ id: user.id }, { relations: ["address"] });
+    expect(res.body.data.user.address[0].cep).to.be.eq(updatedUser.address[0].cep);
+    expect(res.body.data.user.address[0]).to.be.deep.eq({
+      cep: "90354765",
+      city: "São Paulo",
+      complement: "Taqtile",
+      id: String(updatedUser.address[0].id),
+      neighborhood: "Sumaré",
+      state: "SP",
+      street: "Av. Doutor Arnaldo",
+      streetNumber: 2194,
+    });
   });
 
   it("Does not find user in database", async () => {
