@@ -14,7 +14,7 @@ describe("Mutation: createUser", () => {
   });
 
   const createUserMutation = gql`
-    mutation ($user: CreateUserInput!) {
+    mutation ($user: UserCreateInput!) {
       createUser(user: $user) {
         id
         name

@@ -25,6 +25,8 @@ type UsersResponse {
   count: Int
   previusPage: Boolean
   nextPage: Boolean
+  start: Int
+  limit: Int
   users: [User]
 }
 
