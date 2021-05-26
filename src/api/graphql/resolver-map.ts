@@ -24,11 +24,10 @@ const resolverMap: IResolvers = {
     users: async (_: any, { data: args }: { data: UsersInput }, context: any) => {
       validateToken(context.jwt);
 
-      const start = args.start ?? 0;
-      const limit = args.limit ?? 10;
+      const start = args.start;
+      const limit = args.limit;
 
-      const usersCount = await getRepository(User).find()
-      const numberOfUsers = usersCount.length
+      const numberOfUsers = await getRepository(User).count()
 
       const users = await getRepository(User).find({
         order: { name: "ASC" },
